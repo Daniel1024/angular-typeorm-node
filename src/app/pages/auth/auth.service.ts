@@ -5,6 +5,7 @@ import { User, UserResponse } from '@shared/models/user.interface';
 import { environment } from '@env/environment';
 import { catchError, map } from 'rxjs/operators';
 import { JwtHelperService } from '@auth0/angular-jwt';
+import { Router } from '@angular/router';
 
 @Injectable({
   providedIn: 'root'
@@ -15,7 +16,8 @@ export class AuthService {
   private loggedIn = new BehaviorSubject<boolean>(false);
 
   constructor(
-    private http: HttpClient
+    private http: HttpClient,
+    private router: Router
   ) {
     this.checkToken();
   }
@@ -39,6 +41,7 @@ export class AuthService {
   logout(): void {
     localStorage.removeItem('token');
     this.loggedIn.next(false);
+    this.router.navigate(['/login']);
   }
 
   checkToken(): void {

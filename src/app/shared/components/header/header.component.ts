@@ -8,6 +8,7 @@ import { AuthService } from '@auth/auth.service';
 })
 export class HeaderComponent implements OnInit {
   isAdmin = false;
+  isLogged = false;
 
   @Output()
   toggleSidenav = new EventEmitter<void>();
@@ -17,6 +18,7 @@ export class HeaderComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
+    this.auth.isLogged.subscribe((res) => this.isLogged = res);
   }
 
   onToggleSidenav(): void {

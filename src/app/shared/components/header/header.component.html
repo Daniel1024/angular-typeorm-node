@@ -3,12 +3,15 @@
     <span>My APP</span>
     <span class="spacer"></span>
     <div>
-      <a mat-button [routerLink]="'/login'">Login</a>
-      <a mat-button (click)="onLogout()">Logout</a>
-      <a mat-button [routerLink]="'/admin'">Admin</a>
+      <a mat-button *ngIf="!isLogged; else viewLogout" routerLink="/login">Login</a>
+      <a mat-button routerLink="/admin">Admin</a>
     </div>
   </ng-container>
 </mat-toolbar>
+
+<ng-template #viewLogout>
+  <a mat-button (click)="onLogout()">Logout</a>
+</ng-template>
 
 <ng-template #viewAdmin>
   <button mat-icon-button (click)="onToggleSidenav()">
