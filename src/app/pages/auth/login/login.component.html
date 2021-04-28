@@ -1,1 +1,16 @@
-<p>login works!</p>
+<div class="login-form">
+  <mat-card>
+    <mat-card-content>
+      <h1>LOGIN</h1>
+      <form [formGroup]="loginForm" (ngSubmit)="onLogin()">
+        <mat-form-field class="full-width-input">
+          <input matInput type="text" formControlName="username" placeholder="Username" autocomplete="false" required>
+        </mat-form-field>
+        <mat-form-field class="full-width-input separator">
+          <input matInput type="password" formControlName="password" placeholder="Password" autocomplete="false" required>
+        </mat-form-field>
+        <button mat-raised-button color="primary" type="submit">Login</button>
+      </form>
+    </mat-card-content>
+  </mat-card>
+</div>
