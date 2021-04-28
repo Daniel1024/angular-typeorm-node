@@ -4,10 +4,19 @@
       <h1>LOGIN</h1>
       <form [formGroup]="loginForm" (ngSubmit)="onLogin()">
         <mat-form-field class="full-width-input">
-          <input matInput type="text" formControlName="username" placeholder="Username" autocomplete="false" required>
+          <input matInput type="email" formControlName="username" placeholder="Username" autocomplete="false"
+                 [email]="true" required>
+          <mat-error *ngIf="username && username.invalid && (username.dirty || username.touched)">
+            <span *ngIf="username.errors.required">{{ getErrorMessage('required') }}</span>
+            <span *ngIf="username.errors.email">{{ getErrorMessage('email') }}</span>
+          </mat-error>
         </mat-form-field>
         <mat-form-field class="full-width-input separator">
           <input matInput type="password" formControlName="password" placeholder="Password" autocomplete="false" required>
+          <mat-error *ngIf="password && password.invalid && (password.dirty || password.touched)">
+            <span *ngIf="password.errors.required">{{ getErrorMessage('required') }}</span>
+            <span *ngIf="password.errors.minLength">{{ getErrorMessage('minLength') }}</span>
+          </mat-error>
         </mat-form-field>
         <button mat-raised-button color="primary" type="submit">Login</button>
       </form>

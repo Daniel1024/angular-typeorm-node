@@ -1,6 +1,6 @@
 import { Component, OnDestroy } from '@angular/core';
 import { AuthService } from '@auth/auth.service';
-import { FormBuilder } from '@angular/forms';
+import { AbstractControl, FormBuilder, ValidationErrors, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 
@@ -12,8 +12,8 @@ import { Subscription } from 'rxjs';
 export class LoginComponent implements OnDestroy {
   private subs: Subscription[] = [];
   loginForm = this.fb.group({
-    username: [''],
-    password: ['']
+    username: ['', [Validators.required, Validators.email]],
+    password: ['', [Validators.required, Validators.minLength(5)]]
   });
 
   constructor(
@@ -21,6 +21,14 @@ export class LoginComponent implements OnDestroy {
     private fb: FormBuilder,
     private router: Router
   ) { }
+
+  get username(): AbstractControl {
+    return this.loginForm.get('name');
+  }
+
+  get password(): AbstractControl {
+    return this.loginForm.get('password');
+  }
 
   ngOnDestroy(): void {
     this.subs.forEach((sub) => sub.unsubscribe());
@@ -30,6 +38,23 @@ export class LoginComponent implements OnDestroy {
     const formValue = this.loginForm.value;
     this.subs[0] = this.auth.login(formValue)
       .subscribe((res) => res ? this.router.navigate(['home']) : '');
+  }
+
+  isValidField(fieldName: string): boolean {
+    const field = this.loginForm.get(fieldName);
+    return field ? (field.touched || field.dirty) && field.invalid : false;
+  }
+
+  getErrorMessage(error: string): string {
+    let message = '';
+    if (error === 'required') {
+      message = 'You must enter a value';
+    } else if (error === 'email') {
+      message = 'Not a valid email';
+    } else if (error === 'minLength') {
+      message = 'This field must be longer than 5 characters';
+    }
+    return message;
   }
 
 }
